@@ -4,6 +4,9 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
+mod components;
+use components::TodoItem;
+
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "tauri"])]
@@ -11,47 +14,44 @@ extern "C" {
 }
 
 #[derive(Serialize, Deserialize)]
-struct GreetArgs<'a> {
-    name: &'a str,
+struct SearchArgs<'a> {
+    input: &'a str,
 }
 
 #[function_component(App)]
 pub fn app() -> Html {
-    let greet_input_ref = use_node_ref();
+    let search_input_ref = use_node_ref();
 
-    let name = use_state(|| String::new());
+    let ipt = use_state(|| String::new());
 
-    let greet_msg = use_state(|| String::new());
+    let search_val = use_state(|| String::new());
     {
-        let greet_msg = greet_msg.clone();
-        let name = name.clone();
-        let name2 = name.clone();
-        use_effect_with(
-            name2,
-            move |_| {
-                spawn_local(async move {
-                    if name.is_empty() {
-                        return;
-                    }
+        let search_val = search_val.clone();
+        let ipt = ipt.clone();
+        let ipt2 = ipt.clone();
+        use_effect_with(ipt2, move |_| {
+            spawn_local(async move {
+                if ipt.is_empty() {
+                    return;
+                }
 
-                    let args = to_value(&GreetArgs { name: &*name }).unwrap();
-                    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-                    let new_msg = invoke("greet", args).await.as_string().unwrap();
-                    greet_msg.set(new_msg);
-                });
+                let args = to_value(&SearchArgs { input: &*ipt }).unwrap();
+                // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+                let search_res = invoke("search", args).await.as_string().unwrap();
+                search_val.set(search_res);
+            });
 
-                || {}
-            },
-        );
+            || {}
+        });
     }
 
-    let greet = {
-        let name = name.clone();
-        let greet_input_ref = greet_input_ref.clone();
+    let search = {
+        let ipt = ipt.clone();
+        let search_input_ref = search_input_ref.clone();
         Callback::from(move |e: SubmitEvent| {
             e.prevent_default();
-            name.set(
-                greet_input_ref
+            ipt.set(
+                search_input_ref
                     .cast::<web_sys::HtmlInputElement>()
                     .unwrap()
                     .value(),
@@ -61,32 +61,25 @@ pub fn app() -> Html {
 
     html! {
         <main class="container">
-            <div class="row">
-                <a href="https://tauri.app" target="_blank">
-                    <img src="public/tauri.svg" class="logo tauri" alt="Tauri logo"/>
-                </a>
-                <a href="https://yew.rs" target="_blank">
-                    <img src="public/yew.png" class="logo yew" alt="Yew logo"/>
-                </a>
-            </div>
-
-            <p>{"Click on the Tauri and Yew logos to learn more."}</p>
-
-            <p>
-                {"Recommended IDE setup: "}
-                <a href="https://code.visualstudio.com/" target="_blank">{"VS Code"}</a>
-                {" + "}
-                <a href="https://github.com/tauri-apps/tauri-vscode" target="_blank">{"Tauri"}</a>
-                {" + "}
-                <a href="https://github.com/rust-lang/rust-analyzer" target="_blank">{"rust-analyzer"}</a>
-            </p>
-
-            <form class="row" onsubmit={greet}>
-                <input id="greet-input" ref={greet_input_ref} placeholder="Enter a name..." />
-                <button type="submit">{"Greet"}</button>
+            <form class="search" onsubmit={ search }>
+                <input
+                ref={ search_input_ref }
+                type="text"
+                name="search"
+                id="ipt_search"
+                placeholder="Search Todo by name/title:" />
+                <button type="submit">{ "Add Todo" }</button>
             </form>
 
-            <p><b>{ &*greet_msg }</b></p>
+            <p><b>{ &*search_val }</b></p>
+
+            <div class="todos">
+                <TodoItem title={ "Shop list" } description={ "Cheese, Ham, Bread, Milk, Pizza"} />
+                <TodoItem title={ "Project TODO" } description={ "Fix UI, Handle HTTP requests, Authenticate system" }/>
+                <TodoItem title={ "Gardening tools" } description={ "Rake, Shovel, Gloves, Watering Can"} />
+                <TodoItem title={ "My Passwords" } description={ "password123, isTh1sS4fe" } />
+                <TodoItem title={ "secret list" } description={ "he deals the card to find the answer, the sacred geometry of change, the hidden law of probable outcome, the numbers lead the dance"} />
+            </div>
         </main>
     }
 }

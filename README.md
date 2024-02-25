@@ -1,7 +1,6 @@
-# Tauri + Yew
+# app-tauri-todo
+This is a ToDo app based on Tauri & Yew.
 
-This template should help get you started developing with Tauri and Yew.
-
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+## Repo & PRs
+[Repo](https://github.com/GmsGarcia/app-tauri-todo) 
+[PRs](https://github.com/GmsGarcia/app-tauri-todo/pull-requests)

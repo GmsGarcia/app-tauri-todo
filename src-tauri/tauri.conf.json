@@ -22,7 +22,10 @@
       {
         "title": "tauri-todo",
         "width": 800,
-        "height": 600
+        "minWidth": 650,
+        "height": 600,
+        "minHeight": 475,
+        "transparent": true
       }
     ],
     "security": {
