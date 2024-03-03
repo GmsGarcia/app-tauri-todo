@@ -5,7 +5,7 @@ use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
 mod components;
-use components::TodoItem;
+use components::TodoItemComponent;
 
 #[wasm_bindgen]
 extern "C" {
@@ -74,11 +74,11 @@ pub fn app() -> Html {
             <p><b>{ &*search_val }</b></p>
 
             <div class="todos">
-                <TodoItem title={ "Shop list" } description={ "Cheese, Ham, Bread, Milk, Pizza"} />
-                <TodoItem title={ "Project TODO" } description={ "Fix UI, Handle HTTP requests, Authenticate system" }/>
-                <TodoItem title={ "Gardening tools" } description={ "Rake, Shovel, Gloves, Watering Can"} />
-                <TodoItem title={ "My Passwords" } description={ "password123, isTh1sS4fe" } />
-                <TodoItem title={ "secret list" } description={ "he deals the card to find the answer, the sacred geometry of change, the hidden law of probable outcome, the numbers lead the dance"} />
+                <TodoItemComponent title={ "Shop list" } description={ "Cheese, Ham, Bread, Milk, Pizza"} />
+                <TodoItemComponent title={ "Project TODO" } description={ "Fix UI, Handle HTTP requests, Authenticate system" }/>
+                <TodoItemComponent title={ "Gardening tools" } description={ "Rake, Shovel, Gloves, Watering Can"} />
+                <TodoItemComponent title={ "My Passwords" } description={ "password123, isTh1sS4fe" } />
+                <TodoItemComponent title={ "secret list" } description={ "he deals the card to find the answer, the sacred geometry of change, the hidden law of probable outcome, the numbers lead the dance"} />
             </div>
         </main>
     }

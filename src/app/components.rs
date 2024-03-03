@@ -8,7 +8,7 @@ pub struct TodoProps {
 }
 
 #[function_component]
-pub fn TodoItem(props: &TodoProps) -> Html {
+pub fn TodoItemComponent(props: &TodoProps) -> Html {
     let TodoProps { title, description } = props;
 
     html! {
